@@ -1,6 +1,7 @@
 import { Env } from "../env/env";
+import * as cheerio from 'cheerio';
 
-export type MalType = MalList | MalNumber | MalString | MalNil | MalBoolean | MalSymbol | MalKeyword | MalVector | MalHashMap | MalFunction | MalAtom;
+export type MalType = MalList | MalNumber | MalString | MalNil | MalBoolean | MalSymbol | MalKeyword | MalVector | MalHashMap | MalFunction | MalAtom | MalPage;
 
 export const enum Node {
     List = 1,
@@ -14,6 +15,7 @@ export const enum Node {
     HashMap,
     Function,
     Atom,
+    MalPage,
 }
 
 export function equals(a: MalType, b: MalType, strict?: boolean): boolean {
@@ -80,6 +82,20 @@ export function isSeq(ast: MalType): ast is MalList | MalVector {
 
 export function isAST(v: MalType): v is MalType {
     return !!v.type;
+}
+
+export class MalPage {
+    type: Node.MalPage = Node.MalPage;
+    meta?: MalType;
+    
+    constructor(public v: cheerio.Root){
+    }
+
+    withMeta(meta: MalType) {
+        const v = new MalPage(this.v);
+        v.meta = meta;
+        return v;
+    }
 }
 
 export class MalList {

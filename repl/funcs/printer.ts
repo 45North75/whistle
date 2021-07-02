@@ -38,5 +38,7 @@ export function prStr(v: MalType, printReadably = true): string {
             return "#<function>";
         case Node.Atom:
             return `(atom ${prStr(v.v, printReadably)})`;
+        case Node.MalPage:
+            return `#<whistle-page \n ${v.v.html()} \n>`;
     }
 }

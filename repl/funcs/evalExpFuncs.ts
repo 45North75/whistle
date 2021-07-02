@@ -1,5 +1,6 @@
 import { Env } from "../../env/env";
 import { getPage } from "../../language_feaures/get-page";
+import { toTree } from "../../language_feaures/to-tree";
 import Symbols from "../../symbols/symbols";
 import { isSeq, MalList, MalString, MalSymbol, Node } from "../../types/types";
 import { evalExp } from "../evalExp";
@@ -40,9 +41,29 @@ export async function isSymbol(first: MalSymbol, ast: MalList, env: Env)
         }
 
         case Symbols.GET_PAGE: {
-            const [,url] = ast.list;
+            const urlExp = ast.list[1];
+            let url = null;
+
+            if (urlExp.type != Node.String) {
+                url = await evalExp(urlExp, env);
+            } else {
+                url = urlExp;
+            }
             const data = await getPage(url);
             return new MalString(data);
+        }
+
+        case Symbols.TO_TREE: {
+            const payloadExp = ast.list[1];
+            let payload = null;
+
+            if (payloadExp.type != Node.String) {
+                payload = await evalExp(payloadExp, env);
+            } else {
+                payload = payloadExp;
+            }
+            const data = await toTree(payload);
+            return data;
         }
     }
 }
