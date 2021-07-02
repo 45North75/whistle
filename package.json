@@ -1,0 +1,19 @@
+{
+  "name": "whistle",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "whistle": "ts-node whistle.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/node": "^15.14.0",
+    "axios": "^0.21.1",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.5"
+  }
+}
