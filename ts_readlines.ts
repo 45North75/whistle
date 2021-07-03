@@ -2,7 +2,8 @@ import * as rl from 'readline';
 
 var rli = rl.createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
+    terminal: false
   });
 
 export function promise_input(): Promise<string>

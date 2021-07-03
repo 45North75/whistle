@@ -5,8 +5,7 @@ export default class BrowserRepo
 {
     private static browserHeadless: puppeteer.Browser = null;
     private static browser: puppeteer.Browser = null;
-    private static _mode: BrowserMode;
-    public static mode: BrowserMode = BrowserRepo._mode;
+    public static mode: BrowserMode;
 
     private constructor(){};
 
@@ -34,7 +33,7 @@ export default class BrowserRepo
                     break;
                 default: throw new Error("No mode set");
             }
-            this._mode = mode;
+            this.mode = mode;
             return true;
         } catch(ex: any)
         {
@@ -57,12 +56,12 @@ export default class BrowserRepo
 
     public static async setMode(mode: BrowserMode)
     {
-        this._mode = mode;
+        this.mode = mode;
     }
 
     public static async get(): Promise<puppeteer.Browser>
     {
-        switch (this._mode) 
+        switch (this.mode) 
         {
             case BrowserMode.Headless:
                 return this.getBrowserHeadless();

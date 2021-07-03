@@ -114,6 +114,7 @@ function readParen(reader: Reader, ctor: { new(list: MalType[]): MalType; }, ope
 
 function readAtom(reader: Reader): MalType {
     const token = reader.next();
+    if (token === undefined) return new MalString("Local script executed");
     if (token.match(/^-?[0-9]+$/)) {
         const v = parseInt(token, 10);
         return new MalNumber(v);

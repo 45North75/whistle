@@ -6,6 +6,16 @@ import { prStr } from "./printer";
 
 export const ns: Map<MalSymbol, MalFunction> = (() => {
     const ns: { [symbol: string]: typeof MalFunction.prototype.func; } = {
+        "exit"(a :MalNumber): MalBoolean
+        {
+            switch(a.v){
+                case 0:
+                    process.exit(0);
+                case 1:
+                    process.exit(1);
+                default: throw new Error("Invalid exit code");
+            }
+        },
         "clear"(): MalBoolean
         {
             console.clear();

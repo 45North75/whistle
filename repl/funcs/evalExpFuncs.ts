@@ -125,11 +125,15 @@ export async function isSymbol(first: MalSymbol, ast: MalList, env: Env)
             } else {
                 filename = maybeFilename.v as string;
             }
-            const rawFile = readFileSync(filename, "utf-8");
-            const filteredFile = rawFile.split(";");
+            
+
             if (!filename.includes(".lisp")) throw new Error(`The file ${filename} is not a whistle file.`);
-            const cleanedFile = filteredFile.map(entry => entry.split("\r\n").join(""));
+
+            const fileFull = readFileSync(filename, "utf-8").replace(/\;((?=[^\n])[\s|\S])*/g, "")
+            const cleanedFile = fileFull.split("\n").join("").replace(/\)\s*\(/gi, ");-;(").split(";-;");
+
             var result: MalType = null;
+
             for (var line of cleanedFile) 
             {
                 if (line == null) break;
