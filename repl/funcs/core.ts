@@ -1,18 +1,32 @@
 import * as fs from "fs";
 
-import { Node, MalType, MalSymbol, MalFunction, MalNil, MalList, MalVector, MalBoolean, MalNumber, MalString, MalKeyword, MalHashMap, MalAtom, equals, isSeq } from "../../types/types";
+import { Node, MalType, MalSymbol, MalFunction, MalNil, MalList, MalVector, MalBoolean, MalNumber, MalString, MalKeyword, MalHashMap, MalAtom, equals, isSeq, MalJSON } from "../../types/types";
 import { readStr } from "./reader";
 import { prStr } from "./printer";
 
 export const ns: Map<MalSymbol, MalFunction> = (() => {
     const ns: { [symbol: string]: typeof MalFunction.prototype.func; } = {
+        "clear"(): MalBoolean
+        {
+            console.clear();
+            return new MalBoolean(true);
+        },
+        "to-json"(a: MalString): MalJSON {
+            return new MalJSON(JSON.parse(a.v));
+        },
+        "find"(a: MalJSON, b: MalAtom): MalJSON {
+            let json = a.v as object;
+            if (json.hasOwnProperty(b.v.toString())) {
+                return new MalJSON(json[b.v.toString()]);
+            }
+            return new MalJSON(null);
+        },
         "="(a: MalType, b: MalType): MalBoolean {
             return new MalBoolean(equals(a, b));
         },
         throw(v: MalType): MalType {
             throw v;
         },
-
         "nil?"(v: MalType) {
             return new MalBoolean(v.type === Node.Nil);
         },
