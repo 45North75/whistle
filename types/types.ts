@@ -1,5 +1,6 @@
 import { Env } from "../env/env";
 import { evalExp } from "../repl/evalExp";
+import * as pup from 'puppeteer';
 
 export type MalType = MalList 
 | MalNumber 
@@ -12,8 +13,11 @@ export type MalType = MalList
 | MalHashMap 
 | MalFunction
 | MalAtom 
-| MalJSON 
 | WrappedFunction
+| MalPage 
+| MalJSON 
+| MalElements
+| MalChromePage;
 
 type MalF = (...args: (MalType | undefined)[]) => MalType;
 
@@ -29,8 +33,11 @@ export const enum Node {
     HashMap,
     Function,
     Atom,
-    MalJSON,
     WrappedFunction,
+    MalPage,
+    MalJSON,
+    MalElements,
+    MalChromePage,
 }
 
 export function equals(a: MalType, b: MalType, strict?: boolean): boolean {
@@ -97,6 +104,50 @@ export function isSeq(ast: MalType): ast is MalList | MalVector {
 
 export function isAST(v: MalType): v is MalType {
     return !!v.type;
+}
+
+
+export class MalChromePage {
+    type: Node.MalChromePage = Node.MalChromePage;
+    meta?: MalType;
+    
+    constructor(public v: pup.Page) {
+    }
+
+    withMeta(meta: MalType) {
+        const v = new MalChromePage(this.v);
+        v.meta = meta;
+        return v;
+    }
+}
+
+
+export class MalElements {
+    type: Node.MalElements = Node.MalElements;
+    meta?: MalType;
+    
+    constructor(public v: Array<cheerio.Element>){
+    }
+
+    withMeta(meta: MalType) {
+        const v = new MalElements(this.v);
+        v.meta = meta;
+        return v;
+    }
+}
+
+export class MalPage {
+    type: Node.MalPage = Node.MalPage;
+    meta?: MalType;
+    
+    constructor(public v: cheerio.Root){
+    }
+
+    withMeta(meta: MalType) {
+        const v = new MalPage(this.v);
+        v.meta = meta;
+        return v;
+    }
 }
 
 export class WrappedFunction {
