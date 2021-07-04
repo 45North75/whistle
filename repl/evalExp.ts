@@ -23,7 +23,7 @@ export async function evalExp(ast: MalType, env: Env): Promise<MalType> {
 
     const [f, ...args] = result.list;
 
-    if (f.type !== Node.Function) throw new Error(`Unexpected token ${f.type}. Expected a function.`);
+    if ((f.type !== Node.Function) && (f.type != Node.WrappedFunction)) throw new Error(`Unexpected token ${f.type}. Expected a function.`);
 
     return await f.func(...args);
 }

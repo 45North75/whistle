@@ -1,4 +1,4 @@
-import { MalType, MalSymbol, MalList } from "../types/types";
+import { MalType, MalSymbol, MalList, MalBoolean } from "../types/types";
 
 export class Env {
     data: Map<MalSymbol, MalType>;

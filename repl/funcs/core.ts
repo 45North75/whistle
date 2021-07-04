@@ -1,6 +1,21 @@
 import * as fs from "fs";
-
-import { Node, MalType, MalSymbol, MalFunction, MalNil, MalList, MalVector, MalBoolean, MalNumber, MalString, MalKeyword, MalHashMap, MalAtom, equals, isSeq, MalJSON } from "../../types/types";
+import { 
+    Node, 
+    MalType, 
+    MalSymbol, 
+    MalFunction, 
+    MalNil, 
+    MalList, 
+    MalVector, 
+    MalBoolean, 
+    MalNumber, 
+    MalString, 
+    MalKeyword, 
+    MalHashMap, 
+    MalAtom, 
+    equals, 
+    isSeq, 
+    MalJSON } from "../../types/types";
 import { readStr } from "./reader";
 import { prStr } from "./printer";
 
@@ -16,6 +31,24 @@ export const ns: Map<MalSymbol, MalFunction> = (() => {
                 default: throw new Error("Invalid exit code");
             }
         },
+        "spit"(a: MalString, b: MalType): MalBoolean
+        {
+            try {
+                switch(b.type) {
+                    case Node.MalJSON:
+                        fs.writeFileSync(a.v, JSON.stringify((b as MalJSON).v));
+                        break;
+                    case Node.String:
+                        fs.writeFileSync(a.v, (b as MalString).v);
+                        break;
+                }
+                return new MalBoolean(true);
+            } catch (ex: any)
+            {
+                console.log(ex.message);
+                return new MalBoolean(false);
+            }
+        },
         "clear"(): MalBoolean
         {
             console.clear();
@@ -24,10 +57,10 @@ export const ns: Map<MalSymbol, MalFunction> = (() => {
         "to-json"(a: MalString): MalJSON {
             return new MalJSON(JSON.parse(a.v));
         },
-        "find"(a: MalJSON, b: MalAtom): MalJSON {
+        "find"(a: MalJSON, b: MalKeyword): MalJSON {
             let json = a.v as object;
-            if (json.hasOwnProperty(b.v.toString())) {
-                return new MalJSON(json[b.v.toString()]);
+            if (json.hasOwnProperty(b.v)) {
+                return new MalJSON(json[b.v]);
             }
             return new MalJSON(null);
         },

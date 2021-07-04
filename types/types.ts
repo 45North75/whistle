@@ -1,5 +1,5 @@
 import { Env } from "../env/env";
-import * as pup from 'puppeteer';
+import { evalExp } from "../repl/evalExp";
 
 export type MalType = MalList 
 | MalNumber 
@@ -10,12 +10,12 @@ export type MalType = MalList
 | MalKeyword 
 | MalVector 
 | MalHashMap 
-| MalFunction 
+| MalFunction
 | MalAtom 
-| MalPage 
 | MalJSON 
-| MalElements
-| MalChromePage;
+| WrappedFunction
+
+type MalF = (...args: (MalType | undefined)[]) => MalType;
 
 export const enum Node {
     List = 1,
@@ -29,10 +29,8 @@ export const enum Node {
     HashMap,
     Function,
     Atom,
-    MalPage,
     MalJSON,
-    MalElements,
-    MalChromePage,
+    WrappedFunction,
 }
 
 export function equals(a: MalType, b: MalType, strict?: boolean): boolean {
@@ -101,6 +99,38 @@ export function isAST(v: MalType): v is MalType {
     return !!v.type;
 }
 
+export class WrappedFunction {
+    type: Node.WrappedFunction = Node.WrappedFunction;
+    meta?: MalType;
+    constructor(public env: Env, public symbols: MalSymbol[], public binds: MalType){}
+
+    public async func(...args: MalType[]): Promise<MalType> {
+        return evalExp(this.binds, new Env(this.env, this.symbols, args));
+    }
+
+    withMeta(meta: MalType){
+        const v = new WrappedFunction(this.env, this.symbols, this.binds);
+        v.meta = meta;
+        return v;
+    }
+}
+
+export class BasicFunction {
+    type: Node.WrappedFunction = Node.WrappedFunction;
+    meta?: MalType;
+    constructor(public env: Env, public symbols: MalSymbol[], public binds: MalType){}
+
+    public async func(...args: MalType[]): Promise<MalType> {
+        return evalExp(this.binds, new Env(this.env, this.symbols, args));
+    }
+
+    withMeta(meta: MalType){
+        const v = new WrappedFunction(this.env, this.symbols, this.binds);
+        v.meta = meta;
+        return v;
+    }
+}
+
 export class MalJSON {
     type: Node.MalJSON = Node.MalJSON;
     meta?: MalType;
@@ -110,50 +140,6 @@ export class MalJSON {
 
     withMeta(meta: MalType){
         const v = new MalJSON(this.v);
-        v.meta = meta;
-        return v;
-    }
-}
-
-
-export class MalChromePage {
-    type: Node.MalChromePage = Node.MalChromePage;
-    meta?: MalType;
-    
-    constructor(public v: pup.Page) {
-    }
-
-    withMeta(meta: MalType) {
-        const v = new MalChromePage(this.v);
-        v.meta = meta;
-        return v;
-    }
-}
-
-
-export class MalElements {
-    type: Node.MalElements = Node.MalElements;
-    meta?: MalType;
-    
-    constructor(public v: Array<cheerio.Element>){
-    }
-
-    withMeta(meta: MalType) {
-        const v = new MalElements(this.v);
-        v.meta = meta;
-        return v;
-    }
-}
-
-export class MalPage {
-    type: Node.MalPage = Node.MalPage;
-    meta?: MalType;
-    
-    constructor(public v: cheerio.Root){
-    }
-
-    withMeta(meta: MalType) {
-        const v = new MalPage(this.v);
         v.meta = meta;
         return v;
     }
@@ -403,8 +389,6 @@ export class MalHashMap {
     }
 }
 
-type MalF = (...args: (MalType | undefined)[]) => MalType;
-
 export class MalFunction {
     static fromLisp(evalMal: (ast: MalType, env: Env) => MalType, env: Env, params: MalSymbol[], bodyAst: MalType): MalFunction {
         const f = new MalFunction();
@@ -472,6 +456,7 @@ export class MalFunction {
         return new Env(this.env, this.params, args);
     }
 }
+
 
 export class MalAtom {
     type: Node.Atom = Node.Atom;

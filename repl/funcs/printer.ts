@@ -1,4 +1,3 @@
-import BrowserRepo from "../../object_storage/BrowserStorage";
 import { MalType, Node } from "../../types/types";
 
 export function prStr(v: MalType, printReadably = true): string {
@@ -39,13 +38,9 @@ export function prStr(v: MalType, printReadably = true): string {
             return "#<function>";
         case Node.Atom:
             return `(atom ${prStr(v.v, printReadably)})`;
-        case Node.MalPage:
-            return `#<whistle-page \n ${v.v.html()} \n>`;
         case Node.MalJSON:
             return `#<json \n ${JSON.stringify(v.v)} \n>`;
-        case Node.MalElements:
-            return `#<elements count=${v.v.length} >`;
-        case Node.MalChromePage:
-            return `#<chromepage mode=${BrowserRepo.mode} >`;
+        case Node.WrappedFunction:
+            return "#<Wrappedfunction>";
     }
 }
