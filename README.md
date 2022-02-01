@@ -83,5 +83,5 @@ wsil>x ; Inspect
 
 Contributers are welcome to contribute features, bug-fixes, and other changes to the language. 
 Right now the language is in desperate need of refactoring. The language rapidly out-grew the 
-intial design patterns of the MAL it is derrived from, so cleaning up the project 
-is a high priority. To contribute, fork, squash your commits, and submit a pull request for review.
+intial design patterns of the MAL it is derrived from, so cleaning up the project is will have to happen. 
+To contribute, fork, squash your commits, and submit a pull request for review.
