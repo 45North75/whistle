@@ -8,29 +8,16 @@ and some code has been retained.
 and feel free to contribute bug-fixes.
 
 ### A Lisp for Web Scraping
-
-Web scraping should be simple. Right now, there's no good way to interact seamlessly with a browser
-and a parsed DOM using an invariant syntax. Generally, you need to pick between an HTML parsing approach,
-or a headless browser approach with code injection. If you want to use both, you will need to work across a
-combination of different syntaxes, data structures, and design philosophies depending on which libraries you
-combine to get this done.  
-
-Wsil offers a second option. As a high level abstraction layer on top of Cheerio, Axios and Puppeteer, Wsil 
-unites these libraries with a shared set of types, and an invariant syntax. In addition to providing syntax advantages, Wsil offers a collection of interoperable types which allow clean interactions between data collected
-from all of the underlying libraries.
+Web scraping should be simple. It's not. Does this help matters? No, not even remotely. But it keeps you from having to learn a new library, instead you can learn an entire new language. Much easier. It even has a creative name _WSIL_ Web Scraping in Lisp! Amazing, right?
 
 ### Why TypeScript
 
-TypeScript may appear to be an odd, or even bad, choice for implementing a programming language. The objective here 
-is not to create a blazingly fast new programming language to replace an existing one. Instead, Wsil is a designed
-to be an abstraction layer *on top existing web scraping tools*. TypeScript provides access to some of the most powerful
-web scraping tools, while also allowing access to JavaScript without needing a forign-function interface. Since the target
-user-base for this language would have experience developing in JavaScript and TypeScript anyway, this also opens up
-the project to contributions and extensions from the sorts of developers who would benefit most from the language.
+TypeScript may appear to be an odd, or even bad, choice for implementing a programming language. Why implemented a language in a language that's implemented in arguably the most obnixous language on the market?
+
+The objective here is not to create a blazingly fast new programming language to replace an existing one. The objective isn't even to write a _good_ programming language. The objective here is to make sure I never have to fight with Clojure's web scraping utilities again. Yes, _I wrote an entire language rather than reconfigure my IDE to manage this for me_. You're welcome.
 
 ### Examples
 
-A pure Wsil script:
 
 ```clojure
 (def! pages ["http://example.com" "http://news.ycombinator.com"])
@@ -39,7 +26,7 @@ A pure Wsil script:
 (apply openPages pages)
 ```
 
-Execute Wsil scripts from the REPL:
+Execute scripts from the REPL:
 ```clojure
 wsil>(x-file "script.lisp") ; Execute a file, inheret variable declarations
 true
