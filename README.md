@@ -4,8 +4,7 @@ Wsil (*Web Scraping in Lisp*) is a MAL implementation designed around web scrapi
 and some code has been retained.
 
 
-**WARNING**: This project is not remotely close to production ready. Expect the unexpected,
-and feel free to contribute bug-fixes.
+**WARNING**: This project is not remotely close to production ready. Expect the unexpected. Or, do use it in prod. It'll make your alarms _really interesting_ at midnight on a Sunday.
 
 ### A Lisp for Web Scraping
 Web scraping should be simple. It's not. Does this help matters? No, not even remotely. But it keeps you from having to learn a new library, instead you can learn an entire new language. Much easier.
