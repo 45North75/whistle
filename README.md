@@ -11,7 +11,7 @@ Web scraping should be simple. It's not. Does this help matters? No, not even re
 
 ### Why TypeScript
 
-TypeScript may appear to be an odd, or even bad, choice for implementing a programming language. Why implemented a language in a language that's implemented in arguably the most obnixous language on the market?
+TypeScript may appear to be an odd, or even bad, choice for implementing a programming language. Why implement a language in a language that's implemented in language that's arguably the most obnixous language on the market?
 
 The objective here is not to create a blazingly fast new programming language to replace an existing one. The objective isn't even to write a _good_ programming language. The objective here is to make sure I never have to fight with Clojure's web scraping utilities again. Yes, _I wrote an entire language rather than reconfigure my IDE to manage this for me_. It made sense at the time.
 
