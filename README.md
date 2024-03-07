@@ -1,4 +1,7 @@
 ## A Lisp for Web Scraping - Because... Why Not?
+
+Note: I wrote this ages ago, in a fit of boredom during a COVID lockdown long weekend. This is not a particularly good example of code, but the whole premise is somewhat funny. So I'm pinning it.
+
 #### Version: ??
 Wsil (*Web Scraping in Lisp*) is a MAL implementation designed around web scraping.This language is derrived from [this](https://github.com/kanaka/mal/blob/master/impls/ts/step4_if_fn_do.ts), 
 and some code has been retained.
